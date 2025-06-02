@@ -15,7 +15,7 @@ const getApiURL = () => {
 
 async function fetchAuthorPosts() {
   // This fetch automatically includes the JWT token via cookies
-  const res = await fetch(`${getApiURL()}/post/posts?author=me`, { cache: 'no-store' });
+  const res = await fetch(`${getApiURL()}/posts?author=me`, { cache: 'no-store' });
   if (!res.ok) throw new Error('Failed to fetch posts');
   return res.json() as Promise<Post[]>;
 }

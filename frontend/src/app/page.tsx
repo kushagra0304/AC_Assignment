@@ -17,7 +17,7 @@ const getApiURL = () => {
 // Server-rendered component (async)
 export default async function Homepage() {
   // Fetch data from the API
-  const res = await fetch(`${getApiURL()}/post/posts`, { cache: 'no-store' });
+  const res = await fetch(`${getApiURL()}/posts`, { cache: 'no-store' });
   const posts: Post[] = await res.json();
 
   return (

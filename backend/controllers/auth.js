@@ -1,9 +1,10 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const User = require('../schemas/user');
+const userModel = require('../schemas/user');
 const logger = require('../utils/logger');
 const config = require('../utils/config');
+const middlewares = require('../utils/middlewares');
 
 router.post('/signup', async (request, response, next) => {
     try {
@@ -19,7 +20,7 @@ router.post('/signup', async (request, response, next) => {
 
         const saltRounds = 10;
         const passwordHash = await bcrypt.hash(password, saltRounds);
-        const user = new User({ email, passwordHash, name });
+        const user = new userModel({ email, passwordHash, name });
         await user.save();
 
         logger.debug(`User created: ${email}`);
@@ -32,7 +33,8 @@ router.post('/signup', async (request, response, next) => {
 router.post('/login', async (request, response, next) => {
     try {
         const { email, password } = request.body;
-        const user = await User.findOne({ email });
+
+        const user = await userModel.findOne({ email });
         if (!user) {
             return response.status(401).json({ error: 'Invalid email or password' });
         }
@@ -56,7 +58,7 @@ router.post('/login', async (request, response, next) => {
     }
 });
 
-router.get('/', async (request, response, next) => {
+router.get('/verify', middlewares.authenticateToken, async (request, response, next) => {
     response.status(200).send()
 });
 

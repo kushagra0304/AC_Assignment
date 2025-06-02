@@ -24,7 +24,7 @@ export async function middleware(request: NextRequest) {
 
     try {
       // Call external API to validate token
-      const apiURL = `${getApiURL()}/auth/`; // Replace getApiURL() with actual implementation or environment variable
+      const apiURL = `${getApiURL()}/verify`; // Replace getApiURL() with actual implementation or environment variable
       const response = await fetch(apiURL, {
         headers: {
           'Authorization': `Bearer ${token}`,

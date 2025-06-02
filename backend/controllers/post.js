@@ -1,5 +1,6 @@
 const postModel = require('../schemas/user');
 const router = require('express').Router();
+const middlewares = require('../utils/middlewares');
 
 router.get('/posts', async (req, res, next) => {
   const dummyPosts = [
@@ -26,7 +27,7 @@ router.get('/posts', async (req, res, next) => {
   res.json(dummyPosts);
 });
 
-router.post('/post', async (req, res, next) => {
+router.post('/post', middlewares.authenticateToken, async (req, res, next) => {
   try {
     const { title, content } = req.body;
 
