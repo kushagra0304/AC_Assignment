@@ -46,10 +46,10 @@ const authenticateToken = async (request, response, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   const decodedToken = jwt.verify(token, config.TOKEN_SECRET);
-  // Attach user info from token payload to request object
+  
   request.user = {
-    id: decodedToken.id,  // assuming your JWT payload has an 'id' field
-    email: decodedToken.email, // add other fields if needed
+    id: decodedToken.id, 
+    email: decodedToken.email, 
   };
   
   next();

@@ -1,57 +1,57 @@
-const postModel = require('../schemas/user');
+const postModel = require('../schemas/post');
+const userModel = require('../schemas/user');
 const router = require('express').Router();
 const middlewares = require('../utils/middlewares');
 
 router.get('/posts', async (req, res, next) => {
-  const dummyPosts = [
-    {
-      author: 'Alice Johnson',
-      date: '2025-05-01T10:00:00Z',
-      heading: 'Understanding Next.js 14',
-      content: 'Next.js 14 brings many improvements including the app router and better server rendering...'
-    },
-    {
-      author: 'Bob Smith',
-      date: '2025-05-02T15:30:00Z',
-      heading: 'Getting Started with Express',
-      content: 'Express is a fast, unopinionated, minimalist web framework for Node.js...'
-    },
-    {
-      author: 'Carol Lee',
-      date: '2025-05-03T08:45:00Z',
-      heading: 'Why CSS Modules?',
-      content: 'CSS Modules provide scoped CSS, avoiding style conflicts in large applications...'
-    }
-  ];
+  try {
+    const { author } = req.query;
+    let query = {};
 
-  res.json(dummyPosts);
+    // If author parameter is provided, filter posts by that author
+    if (author) {
+      query.authorId = author;
+    }
+
+    // Fetch posts from database and populate author information
+    const posts = await postModel.find(query)
+      .populate('authorId', 'name email')
+      .sort({ createdAt: -1 }); // Sort by creation date, newest first
+
+    res.json(posts);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/post', middlewares.authenticateToken, async (req, res, next) => {
-  try {
     const { title, content } = req.body;
 
     // Basic validation
     if (!title || !content) {
-      return res.status(400).json({ error: 'Title and content are required' });
+        return res.status(400).json({ error: 'Title and content are required' });
     }
 
     // req.user is set by auth middleware, contains user ID
     const authorId = req.user.id;
 
     const newPost = new postModel({
-      title,
-      content,
-      authorId,
-      createdAt: new Date()
+        title,
+        content,
+        authorId,
+        createdAt: new Date()
     });
 
     const savedPost = await newPost.save();
 
+    // Update the user's post array with the new post
+    await userModel.findByIdAndUpdate(
+        authorId,
+        { $push: { post: savedPost._id } },
+        { new: true }
+    );
+
     res.status(201).json(savedPost.toJSON());
-  } catch (error) {
-    next(error);
-  }
 });
 
 module.exports = router;

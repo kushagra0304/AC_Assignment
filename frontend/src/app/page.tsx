@@ -1,10 +1,17 @@
 import styles from './Homepage.module.css';
 
-// Define the type of a single post
+// Define the type of a single post based on new DS
+type Author = {
+  email: string;
+  name: string;
+  id: string;
+};
+
 type Post = {
-  author: string;
-  date: string;
-  heading: string;
+  id: string;
+  authorId: Author;
+  createdAt: string;
+  title: string;
   content: string;
 };
 
@@ -24,11 +31,11 @@ export default async function Homepage() {
     <div className={styles.container}>
       <h1 className={styles.title}>Blog Posts</h1>
       <div className={styles.postList}>
-        {posts.map((post, index) => (
-          <div key={index} className={styles.postCard}>
-            <h2 className={styles.postHeading}>{post.heading}</h2>
+        {posts.map((post) => (
+          <div key={post.id} className={styles.postCard}>
+            <h2 className={styles.postHeading}>{post.title}</h2>
             <p className={styles.postMeta}>
-              By {post.author} on {new Date(post.date).toLocaleDateString()}
+              By {post.authorId.name} on {new Date(post.createdAt).toLocaleDateString()}
             </p>
             <p className={styles.postContent}>{post.content}</p>
           </div>
