@@ -1,9 +1,7 @@
 const config = require('./config');
 
 const debug = (...text) => {
-    if(config.ENVIRONMENT === "development") {
-        console.info(...text);
-    }
+    console.info(...text);
 }
 
 const measureRequestTime = (req, res, next) => {
