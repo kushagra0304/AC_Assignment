@@ -7,27 +7,23 @@ const config = require('../utils/config');
 const middlewares = require('../utils/middlewares');
 
 router.post('/signup', async (request, response, next) => {
-    try {
-        const { email, password, name } = request.body;
-        if (!email || !password || !name) {
-            return response.status(400).json({ error: 'Email, password and name required' });
-        }
-
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return response.status(400).json({ error: 'Email already in use' });
-        }
-
-        const saltRounds = 10;
-        const passwordHash = await bcrypt.hash(password, saltRounds);
-        const user = new userModel({ email, passwordHash, name });
-        await user.save();
-
-        logger.debug(`User created: ${email}`);
-        response.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        next(error);
+    const { email, password, name } = request.body;
+    if (!email || !password || !name) {
+        return response.status(400).json({ error: 'Email, password and name required' });
     }
+
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+        return response.status(400).json({ error: 'Email already in use' });
+    }
+
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+    const user = new userModel({ email, passwordHash, name });
+    await user.save();
+
+    logger.debug(`User created: ${email}`);
+    response.status(201).json({ message: 'User registered successfully' });
 });
 
 router.post('/login', async (request, response, next) => {
