@@ -49,7 +49,7 @@ app.use(cookieParser());
 // Cors setup
 
 const corsOptions = {
-  origin: 'http://localhost:3000', // Allow only this domain
+  origin: config.ENVIRONMENT === "development" ? 'http://localhost:3000' : "http://ec2-13-233-214-86.ap-south-1.compute.amazonaws.com:10000", // Allow only this domain
   optionsSuccessStatus: 200 // Some legacy browsers choke on 204
 };
 
