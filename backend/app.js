@@ -49,8 +49,11 @@ app.use(cookieParser());
 // Cors setup
 
 const corsOptions = {
-  origin: config.ENVIRONMENT === "development" ? 'http://localhost:3000' : "https://ac-assignment.vercel.app", // Allow only this domain
-  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+  origin: [
+    'http://localhost:3000',
+    'https://ac-assignment.vercel.app'
+  ],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
