@@ -12,7 +12,7 @@ router.post('/signup', async (request, response, next) => {
         return response.status(400).json({ error: 'Email, password and name required' });
     }
 
-    const existingUser = await User.findOne({ email });
+    const existingUser = await userModel.findOne({ email });
     if (existingUser) {
         return response.status(400).json({ error: 'Email already in use' });
     }
