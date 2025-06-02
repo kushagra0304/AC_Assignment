@@ -1,7 +1,7 @@
 const config = require('./config');
 
 const debug = (...text) => {
-    if(config.ENVIROMENT === "development" || config.ENVIROMENT === "debug") {
+    if(config.ENVIRONMENT === "development") {
         console.info(...text);
     }
 }

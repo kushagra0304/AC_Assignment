@@ -9,7 +9,7 @@ const cookieParser = require('cookie-parser');
 // My imports 
 
 const config = require('./utils/config');
-// const authRouter = require('./controllers/auth');
+const authRouter = require('./controllers/auth');
 const middlewares = require('./utils/middlewares');
 
 // ---------------------------------------------------------
@@ -36,19 +36,23 @@ mongoose.Schema.Types.String.checkRequired(v => typeof v === 'string');
 // ---------------------------------------------------------
 // Middleware list
 
-// if (config.ENVIROMENT === 'development') {
-//   app.use(require('./utils/middlewares').morganRequestLogger);
-// }
+if (config.ENVIRONMENT === 'development') {
+  app.use(require('./utils/middlewares').morganRequestLogger);
+}
 
-// app.use(express.json());
-// app.use(cookieParser());
-// app.use(middlewares.authenticateUser)
+app.use(express.json());
+app.use(cookieParser());
+
+// Only contains login and signup, that is why before token verification
+app.use('/auth', authRouter);
+
+app.use(middlewares.authenticateToken)
 // ----------------------------
 // Controllers
-// app.use('/auth', authRouter);
+app.use('/', authRouter);
 // ----------------------------
 // app.use(middlewares.unknownEndpoint);
-// app.use(middlewares.errorHandler); // this has to be the last loaded middleware.
+app.use(middlewares.errorHandler); // this has to be the last loaded middleware.
 
 // ---------------------------------------------------------
 // Export express app

@@ -1,0 +1,21 @@
+POST http://localhost:10000/auth/signup
+Content-Type: application/json
+
+{
+    "email": "kushagra0304@gmail.com",
+    "password": "KUsh@1234",
+    "name": "kushagra agarwal"
+}
+
+###
+POST http://localhost:10000/auth/login
+Content-Type: application/json
+
+{
+    "email": "kushagra0304@gmail.com",
+    "password": "KUsh@1234"
+}
+
+###
+GET http://localhost:10000/auth/
+authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4M2Q5ZDk3MGZhNWRmYjQ4YmM4ODc1NiIsImVtYWlsIjoia3VzaGFncmEwMzA0QGdtYWlsLmNvbSIsImlhdCI6MTc0ODg2ODc1MywiZXhwIjoxNzQ5NDczNTUzfQ.LaBuA5qT7u9lCN8htznl1m43ihRyJ0vPUpx_gwmdB2k
