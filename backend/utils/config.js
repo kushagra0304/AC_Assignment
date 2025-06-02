@@ -1,6 +1,4 @@
-if(process.env.ENVIRONMENT === "development") {
-  require('dotenv').config();
-}
+require('dotenv').config();
 
 const PORT = process.env.PORT || 10000;
 const ENVIRONMENT = process.env.ENVIRONMENT;
