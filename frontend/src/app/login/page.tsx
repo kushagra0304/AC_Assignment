@@ -4,10 +4,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import styles from "../AuthForm.module.css";
 
-const getApiURL = () => {
-  return (process.env.NODE_ENV === "development") ? process.env.NEXT_PUBLIC_DEV_API_URL : process.env.NEXT_PUBLIC_PROD_API_URL
-}
-
 export default function LoginPage() {
   const router = useRouter();
 
@@ -22,7 +18,8 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await fetch(`${getApiURL()}/auth/login`, {
+      // Call the Next.js API route instead of the backend directly
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -35,15 +32,8 @@ export default function LoginPage() {
         return;
       }
 
-      const data = await res.json();
-      const token = data.token;
-
-      if (token) {
-        localStorage.setItem("token", token);
-        router.push("/");
-      } else {
-        setError("Token not found");
-      }
+      // No need to handle token in client; server sets cookie
+      router.push("/");
     } catch (err) {
       console.log(err);
       setError("Network error");
