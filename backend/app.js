@@ -4,6 +4,7 @@
 const express = require('express');
 const { default: mongoose } = require('mongoose');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
 // ---------------------------------------------------------
 // My imports 
@@ -43,13 +44,27 @@ if (config.ENVIRONMENT === 'development') {
 app.use(express.json());
 app.use(cookieParser());
 
+// ----------------------------
+// Cors setup
+
+const corsOptions = {
+  origin: 'http://localhost:3000', // Allow only this domain
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+};
+
+app.use(cors(corsOptions));
+
+// ----------------------------
+
 // Only contains login and signup, that is why before token verification
 app.use('/auth', authRouter);
 
 app.use(middlewares.authenticateToken)
 // ----------------------------
 // Controllers
+
 app.use('/', authRouter);
+
 // ----------------------------
 // app.use(middlewares.unknownEndpoint);
 app.use(middlewares.errorHandler); // this has to be the last loaded middleware.
