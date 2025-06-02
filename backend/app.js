@@ -11,6 +11,7 @@ const cors = require('cors');
 
 const config = require('./utils/config');
 const authRouter = require('./controllers/auth');
+const postRouter = require('./controllers/post');
 const middlewares = require('./utils/middlewares');
 
 // ---------------------------------------------------------
@@ -55,15 +56,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // ----------------------------
-
-// Only contains login and signup, that is why before token verification
-app.use('/auth', authRouter);
-
-app.use(middlewares.authenticateToken)
-// ----------------------------
 // Controllers
 
 app.use('/', authRouter);
+app.use('/', postRouter)
 
 // ----------------------------
 // app.use(middlewares.unknownEndpoint);

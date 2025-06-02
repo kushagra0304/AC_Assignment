@@ -42,12 +42,17 @@ const handleDataBaseConnection = async (request, response, next) => {
 
 // Because of time constraints I have not implemented 2 token strategy. using only access token for now not refresh token
 const authenticateToken = async (request, response, next) => {
-    const authHeader = request.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+  const authHeader = request.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
 
-    jwt.verify(token, config.TOKEN_SECRET);
-
-    next();
+  const decodedToken = jwt.verify(token, config.TOKEN_SECRET);
+  // Attach user info from token payload to request object
+  request.user = {
+    id: decodedToken.id,  // assuming your JWT payload has an 'id' field
+    email: decodedToken.email, // add other fields if needed
+  };
+  
+  next();
 };
 
 const unknownEndpoint = async (request, response) => {

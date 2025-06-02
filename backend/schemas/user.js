@@ -1,14 +1,13 @@
 const mongoose = require('mongoose');
 
-// id is created by mongoose when we save a document
-const userSchema = new mongoose.Schema({
-    email: { type: String, required: true, unique: true, index: true },
-    name: { type: String, required: true },
-    passwordHash: { type: String, required: true },
-    post: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post', default: [] }],
+const postSchema = new mongoose.Schema({
+    title: { type: String, required: true },
+    content: { type: String, required: true },
+    authorId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    createdAt: { type: Date, default: Date.now }
 });
 
-userSchema.set('toJSON', {
+postSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -16,8 +15,6 @@ userSchema.set('toJSON', {
   },
 });
 
-// The first argument to the function below dictates the collection to put new documents in.
-// This is fragile
-const userModel = mongoose.model('User', userSchema);
+const postModel = mongoose.model('Post', postSchema);
 
-module.exports = userModel;
+module.exports = postModel;
